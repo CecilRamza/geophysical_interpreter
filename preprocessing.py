@@ -8,29 +8,26 @@ from herramientas import cercanos
 
 ########################################################
 #                                                      #
-# Esta clase prepara las bases de datos para el        #
-# entrenamiento y clasificación, funciona para         #
-# formatos de magnetometría y eléctrica.               #
+# This class prepares the databases for further        #
+# training and clustering, made for magnatometry and   #
+# ERT2D surveys.                                       #
 #                                                      #
-# preparar(carpeta), donde "carpeta" es la carpeta en  #
-# la que se encuentran los archivos a preparar.        #
+# preparar(carpeta), where "carpeta" is the folder     #
+# where the data files are stored.                     #
 #                                                      #
-# preparar.crear_base_magnetometria(vectores), donde   #
-# "vectores" son las variables almacenadas en los      #
-# archivos especificados en forma de lista.            #
+# preparar.crear_base_magnetometria(vectores), where   #
+# "vectores" are the stored variables in the files     #
+# named as them. Is a list variable.                   #
 #                                                      #
-# preparar.crear_base_electrica(carpetas), donde       #
-# "carpetas" es una lista con las carpetas de las      #
-# inversiones resultantes usando el resipy.            #
+# preparar.crear_base_electrica(carpetas), where       #
+# "carpetas" is a list with the respective inversion   #
+# models folders from the resipy API.                  #
 #                                                      #
-# preparar.vecindad(vecinos), donde "vecinos" es el    #
-# número de elementos adyacenytes que se usarán en el  #
-# entrenamiento.                                       #
+# preparar.vecindad(vecinos), where "vecinos" is the   #
+# number of neighbors elements to use in the training. #
 #                                                      #
-# preparar.guardar(nombre), donde "nombre" es el       #
-# nombre del archivo                                   #
-# donde se almacenará la base de datos que se usará    #
-# para el entrenamiento.                               #
+# preparar.guardar(nombre), where "nombre" is the      #
+# output filename with the database preprocessed.      #
 #                                                      #
 ########################################################
 
@@ -139,53 +136,42 @@ class preparar:
 
 ######################################################################
 #                                                                    #
-# Esta clase realiza una serie de modelos inversos                   #
-# geoeléctricos semi-automáticos cuyo fin es ser una                 #
-# base de datos para entrenamiento.                                  #
+# This class performs a series of semi-automatic geoelectrical       #
+# inverse models for the making of a training set.                   #
 #                                                                    #
-# modelar_electrica_2D(archivo,mallai,mallaf), donde                 #
-# "archivo" es la ruta al archivo con formato vtk que                #
-# se usará como base para la creación de los modelos                 #
-# (nota para mi, recuerdo que no es el grid que se                   #
-# almacena cuando le pones "guardar", debe ser el                    #
-# generado por el software en otra carpeta, debes                    #
-# recordar cuál es, busca en donde sea concordante el                #
-# número de regiones y su resistividad).                             #
-# "mallai" es el archivo que define todo el comienzo                 #
-# del archivo vtk, hasta antes de SCALARS res0 y                     #
-# LOOKUP_TABLE. "mallaf" es el archivo que define todo               #
-# el final del archivo vtk, hasta SCALARS phase0.                    #
+# modelar_electrica_2D(archivo,mallai,mallaf), where "archivo" is    #
+# the file path of a base VTK mesh for the inverse models creation   #
+# "mallai" is the file path with the fist section of the VTK mesh    #
+# until the SCALARS res0 variable and LOOKUP_TABLE. "mallaf" is the  #
+# file path with the last section of the VTK mesh until the SCALARS  #
+# phase0 variable                                                    #
 #                                                                    #
 # modelar_electrica_2D.geometria(nelectrodos,dx),                    #
-# donde "nelectrodos" es el número de electrodos                     #
-# espaciados cada "dx".                                              #
+# where "nelectrodos" is the electrode number for direct modelling   #
+# with a "dx" spacing.                                               #
 #                                                                    #
-# modelar_electrica_2D.modelo(secuencia,nelectrodos,dx), donde       #
-# "secuencia" es la ruta al archivo que contiene la                  #
-# secuencia de lectura con encabezados C+,C-,P+,P-, "nelectrodos" es #
-# el número de electrodos de la secuencia y "dx" es su separación.   #
+# modelar_electrica_2D.modelo(secuencia,nelectrodos,dx), where       #
+# "secuencia" is the file path which contains the automatic sequence #
+# file whit headers C+,C-,P+,P-, "nelectrodos" is the electrode      #
+# number in the sequence files and "dx" the spacing.                 #
 #                                                                    #
 # modelar_electrica_2D.modelos(intervalos,secuencias,n_modelos),     #
-# donde "intervalos" es una lista de dos dimensiones con los         #
-# límites inferior y superior para la generación de                  #
-# resistividades aleatorias, "secuencias" es una lista con las       #
-# direcciones de las secuencias que se usarán para realizar los      #
-# modelos, "n_modelos" es el número de modelos que se                #
-# realizarán. Se recibirán muchas respuestas del API de resipy.      #
+# where "intervalos" is a two-dimensional list variable with the     #
+# bottom and upper limits for the creation of random resistivity     #
+# values, "secuencias" is a list variable with the automatic         #
+# sequence path to create the direct models, "n_modelos" is the      #
+# number of models to create.                                        #
 #                                                                    #
 # modelar_electrica_2D.agrupar_secuencias(vecinos,iteracion,isecuencia), #
-# donde "vecinos" es el número de vectores que se desean agregar     #
-# para formar parte de las variables explicativas, "iteracion"       #
-# es el número de iteraciones modelos realizados, por omisión se     #
-# toman los usados en "modelos" (si aplica), isecuencia es el        #
-# número de secuencias usadas, por omisión se toman las usadas       #
-# en "modelos", (si aplica).                                         #
+# where "vecinos" is the number of neighbors to add to the           #
+# database's variables, "iteracion" is the number of inverse models  #
+# to create, "isecuencia" is the number of automatic sequences       #
+# applied                                                            #
 #                                                                    #
 # modelar_electrica_2D.agrupar_modelo(iteracion,isecuencia,vecinos), #
-# donde "iteracion", "isecuencia" y "vecinos" tienen el mismo        #
-# comportamiento que las variables usadas en "agrupar_secuencias",   #
-# la base de datos resultante se almacena en un archivo nombrado     #
-# "Modelos.dat".                                                     #
+# where "iteracion", "isecuencia" and "vecinos" have the same        #
+# variable behaviour of "agrupar_secuencias", the output database is #
+# saved in a file named as "Modelos.dat".                            #
 #                                                                    #
 # ####################################################################
 

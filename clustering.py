@@ -16,91 +16,78 @@ from pyclustering.cluster.kmedians import kmedians
 
 #########################################################
 #                                                       #
-# Esta clase aplica la clasificación a partir del       #
-# entrenamiento anterior, así como la preparación de    #
-# las mallas para visualización de los centroides o de  #
-# la red neuronal. entrenamiento.clasificar almacena    #
-# la base de datos en todo el proceso.                  #
+# This class aplies the clustering methodology on the   #
+# clustering set using the output parameters from the   #
+# training step. The grids are prepared to display the  #
+# SOM or clusters, as well as the display of the        #
+# automated interpretation of geophysical data.         #
+# entrenamiento.clasificar stores the clustered data.   #
 #                                                       #
-# clasificacion(archivo,columnas), donde "archivo" es   #
-# la ruta al archivo con la base de datos a             #
-# clasificar, "columnas" es una lista con los números   #
-# de columna que indican las variables a usar para      #
-# clasificar, se espera sean las mismas usadas en el    #
-# entrenamiento. clasificacion.x son las coordenadas    #
-# en x, clasificacion.y son las coordenadas en y,       #
-# clasificacion.nn es el tamaño de la base de datos.    #
+# clasificacion(archivo,columnas), where "archivo" is   #
+# the file path to the database to apply the clustering,#
+# "columnas" is a list with the column numbers of the   #
+# variables to use to cluster, this variables needs to  #
+# be the ones chosen in the training step.              #
+# entrenamiento. clasificacion.x are the x coordinates, #
+# clasificacion.y are the y coordinates,                #
+# clasificacion.nn is the database size [0].            #
 #                                                       #
 # clasificacion.reduccion_pca(columnas,estandarizaciones,pcas,componentes), #
-# donde "columnas" es una lista que contiene los        #
-# conjuntos de variables a reducir, esperando que sean  #
-# los mismos usados en el entrenamiento.                #
-# "estandarizaciones" son las transformaciones usadas   #
-# para estandarizar los datos de entrenamiento. "pcas"  #
-# contiene la matriz de transformación de cada          #
-# conjunto de variables durante el entrenamiento.       #
-# "componentes" es una lista con el número de           #
-# componentes usadas para reducir la dimensionalidad,   #
-# se espera que coincida con las usadas para el         #
-# entrenamiento.                                        #
+# where "columnas" is a list that contains the variables#
+# set to reduce its dimensionality, this sets needs to  #
+# be the same used in the training step.                #
+# "estandarizaciones" are the transformations used      #
+# to standarize the training set. "pcas" contains the   #
+# transformation matrix of each variable set obtained   #
+# from the training step.                               #
+# "componentes" is a list with the number of components #
+# to reduce the dimensionality using the PCA algorithm, #
+# this list needs to be the same used in the training   #
+# step.                                                 #
 #                                                       #
-# clasificacion.escalamiento(escala), donde "escala"    #
-# es la transormación usada en los datos de             #
-# entrenamiento.                                        #
+# clasificacion.escalamiento(escala), where "escala"    #
+# is the transformation used in the training step.      #
 #                                                       #
-# clasificacion.kmeans(kmeans), donde "kmeans" es el    #
-# objeto resultado del entrenamiento.                   #
-# clasificacion.etiquetas son las etiquetas de cada     #
-# dato, clasificacion.centros son las coordenadas de    #
-# los centroides. A la salida genera un histograma con  #
-# la frecuencia de uso de los centroides.               #
+# clasificacion.kmeans(kmeans), where "kmeans" is the   #
+# output object from the training step.                 #
+# clasificacion.etiquetas are the resulting data labels.#
+# clasificacion.centros cluster coordinates. This method#
+# generates an histogram showing the using frequency    #
+# of each cluster.                                      #
 #                                                       #
-# clasificacion.kmedians(kmedians), donde "kmedians"    #
-# es el objeto resultado del entrenamiento.             #
-# clasificacion.etiquetas son las etiquetas de cada     #
-# dato, clasificacion.centros son las coordenadas de    #
-# los centroides. A la salida genera un histograma con  #
-# la frecuencia de uso de los centroides.               #
+# clasificacion.kmedians(kmedians), where "kmedians"    #
+# is the output object from the training step.          #
+# clasificacion.etiquetas are the resulting data labels.#
+# clasificacion.centros are the clusters coordinates    #
+# This method generates an histogram showing the using  #
+# frequency of each cluster.                            #
 #                                                       #
-# clasificacion.kmedoids(kmedoids), donde "kmedoids"    #
-# es el objeto resultado del entrenamiento.             #
-# clasificacion.etiquetas son las etiquetas de cada     #
-# dato, clasificacion.centros son las coordenadas de    #
-# los centroides. A la salida genera un histograma con  #
-# la frecuencia de uso de los centroides. Aún no es     #
-# aplicable por cuestiones de memoria                   #
+# clasificacion.som(som), where "som" is the resulting  #
+# map from the clustering. "clasificacion.indices is an #
+# array with neuron's labels,                           #
+# clasificacion.etiquetas are the data labels,          #
+# clasificacion.pesos are the neuron's weights,         #
+# clasificacion.nx is the number of rows of the build   #
+# network, clasificacion.ny is the number of columns of #
+# the build network. This method generates an histogram #
+# showing the using frequency of each neuron.           #
 #                                                       #
-# clasificacion.som(som), donde "som" es el objeto      #
-# resultante del levantamiento. "clasificacion.indices  #
-# es un arreglo con el identificador de cada neurona,   #
-# clasificacion.etiquetas son las etiquetas de cada     #
-# dato, clasificacion.pesos son los pesos de cada       #
-# neurona de la red, clasificacion.nx es el número de   #
-# filas de la red, clasificacion.ny es el número de     #
-# columnas en la red, clasificacion.etiquetas son las   #
-# etiquetas de cada dato. A la salida genera un         #
-# histograma con la frecuencia de uso de las neuronas.  #
-#                                                       #
-# clasificacion.etiquetar(columna), agrega a            #
-# clasificacion.clasificados las coordenadas, valor     #
-# original de la variable "columna", valor              #
-# pre-procesado de la variable "columna" y las          #
-# etiquetas -para cada dato- esperando que sean las     #
-# etiquetas de color RGB.                               #
+# clasificacion.etiquetar(columna), adds the            #
+# coordinates, value of variables and label (RGB) value #
+#to the object clasificacion.clasificados.              #
 #                                                       #
 # clasificacion.malla(metodo,radio,cumulos,metodo_sub). #
-# Donde "metodo" es el usado para el entrenamiento y    #
-# clasificación, pudiendo ser "centroides" (para        #
-# métodos aglomerativos), "red_rectangular" o           #
-# "red_hexagonal". "radio" es el radio de las esferas   #
-# para el despliegue de los centroides para el método   #
-# "centroides". "cumulos" es el número de conjuntos de  #
-# neuronas deseado para el cálculo de colores en la red #
-# neuronal. "metodo_sub" es el método a usar para la    #
-# generación de los conjuntos de neuronas, pudiendo ser #
+# Where "metodo" is the used in the training and        #
+# clustering set: "centroides" (for k-means and         #
+# k-medians), "red_rectangular" or "red_hexagonal" for  #
+# the SOM algorithm. "radio" are the sphere ratios to   #
+# display the clusters when the "centroides" method is  #
+# chosen. "cumulos" is the number of neurons culsters   #
+# to compute the color vector for each one. "metodo_sub"#
+# is the method to generate the neurons clusters:       #
 # "kmedias", "kmedianas" o "kmedoides".                 #
-# clasificacion.malla_etiquetas contiene la malla ([0]) #
-# y los valores de color para cada celda ([1]).         #
+# clasificacion.malla_etiquetas contains the grid ([0]) #
+# and the color vector of each cell ([1]).              #
 #                                                       #
 #########################################################
 

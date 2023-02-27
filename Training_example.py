@@ -2,20 +2,20 @@ from entrenamiento import *
 import pickle
 
 ###
-# Entrenamiento
+# Training
 ###
 
 ##
-# "n_entrenar" es el número de archivos cuyos vectores se usarán para entrenar
-# "centroides" es usado para el entrenamiento usando métodos de agrupamiento
-# "bases" es una lista cuyos elementos son los nombres de archivos de los que se eligirán las bases de datos que se usarán para entrenar
-# "columnas" es una lista con las columnas de las variables que se usarán para entrenar
-# "reduccion" es una lista de listas que contiene los conjuntos de variables (columnas) a usar para reducir la dimensionalidad usando PCA, considerando únicamente las variables de la lista "columnas"
-# "varianzas" es una lista cuyos elementos son la varianza que se usará para elegir las componentes principales del algoritmo PCA
+# "n_entrenar" is the number of files to conform the training set
+# "centroides" is used to train using the k-means or k-medians algorithms
+# "bases" is a list which its elements are the file names that can be chosen to conform the training set
+# "columnas" is a list with the databases column numbers that will be used to train
+# "reduccion" is a list of lists which contains the variables set (columns) in which the dimensionality reduction algorithms will be used on
+# "varianzas" is a list with the variance to choose the pricipal components of the PCA algorithm
 ##
 
 #
-# El siguiente es un ejemplo de entrenamiento por métodos aglomerativos
+# The following code is an training example using the k-means or k-medians algorithms
 #
 
 ciclo=True
@@ -75,7 +75,7 @@ with open("centroides.p","wb") as outfile:
     pickle.dump(entrenada.kmeans,outfile)
 
 #
-# El siguiente es un ejemplo de entrenamiento por SOM
+# The following code is an training example using the SOM algorithm
 #
 
 while ciclo:

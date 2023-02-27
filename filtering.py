@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
 from sklearn.ensemble import IsolationForest as IsFo
 from sklearn.neighbors import LocalOutlierFactor as LOF
-from herramientas import plot_signal_decomp
+from tools import plot_signal_decomp
 
 #######################################################################
 #                                                                     #
@@ -25,7 +25,7 @@ from herramientas import plot_signal_decomp
 # where "voltaje" is the column number where is saved the desired     #
 # variable to filter. "ondicula" defines the wavelet to use           #
 # according to the pywt definitions. "componentes" is the number of   #
-# deocompositions that will be applied to the original signal.        #
+# decompositions that will be applied to the original signal.         #
 # "recursion" is the number of recursions to filter each depth level. #
 # In each recursion will be displayed the multiscale decomposition    #
 # plot, next the system waits the input of attenuation factors for    #
@@ -41,33 +41,26 @@ from herramientas import plot_signal_decomp
 # The resistivity variable needs be defined on the seventh column of  #
 # the database.                                                       #
 #                                                                     #
-# Magnetometría: Inicializar y aplicar el método.                     #
-# fitrado(archivo,"magnetometría"), donde "archivo" es la ruta al     #
-# archivo donde se encuentran almacenados los datos, las dos primeras #
-# columnas deben ser las coordenadas.                                 #
+# Magnetometry: initialize and choose the method.                     #
+# fitrado(archivo,"magnetometría"), where "archivo" is the path to    #
+# the database, the first and second columns are the coordinates of   #
+# each data point.                                                    #
 # filtrado.ondicula_magnetometria(columnas,resolucion_x,resolucion_y,malla,ventana,ondicula,componentes,pesos,pesos2) #
-# "colummnas" es una tupla con los números de columna a filtrar, la   #
-# numeración comienza desde cero. "resolucion_x" y "resolucion_y" es  #
-# el número de elementos a interpolar para crear la malla. "malla" es #
-# una variable booleana para especificar si se filtrará la malla      #
-# completa. "ventana" es una variable booleana para especificar si se #
-# filtrará una ventana definida por dos coordenadas                   #
-# (superior izquierda e inferior derecha, en ese orden) introducidas  #
-# de forma interactiva por el usuario a partir de una figura.         #
-# "ondicula" es la cadena que define a la ondicula a usar de acuerdo  #
-# con las definiciones de pywt. "componentes" es el número de         #
-# componentes para descomponer la señal 2D original. "pesos" son los  #
-# factores de atenuación de las componentes dadas por la transformada #
-# wavelet, comienza por la componente de aproximación y               #
-# posteriormente, en orden, las componentes de detalle. "pesos2" son  #
-# los factores de atenuación de la malla cuando "malla=True" y        #
-# "ventana=True"                                                      #
+# "colummnas" is a tuple with the column label to filter, begining    #
+# with 0. "resolucion_x" y "resolucion_y" are the number of elements  #
+# to interpolate to create the mesh. "malla" is a boolean variable    #
+# used to specify the filter type: complete dataset, instead          #
+# "ventana" is used to specify a windowed filter defined by a         #
+# coordinate pair defined interactively by the user (upper left and   #
+# bottom right coordinates). "ondicula" defines the wavelet to use    #
+# according to the pywt definitios. "componentes" is the number of    #
+# decompositions that will be applied to the original 2D signal.      #
+# "pesos" are the components attenuation factors according to the     #
+# DWT2D, starts with the approximation component before the ordered   #
+# detail components. "pesos2" are the attenuation factors when        #
+# "malla=True" and "ventana=True"                                     #
 #                                                                     #
-# filtrado.guardar(nombre), almacena los datos filtrados, para        #
-# eléctrica almacena los datos con el mismo formato del archivo de    #
-# entrada, para magnetometría se almacenan las coordenadas y las      #
-# columnas filtradas. "nombre" es el nombre del archivo en el que     #
-# se almacenarán los datos.                                           #
+# filtrado.guardar(nombre), save the filtered data.                   #
 #                                                                     #
 #######################################################################
 

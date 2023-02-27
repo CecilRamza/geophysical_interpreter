@@ -10,69 +10,58 @@ from sklearn_extra.cluster import KMedoids
 from matplotlib.patches import RegularPolygon
 from pyclustering.cluster.kmedians import kmedians
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from herramientas import *
+from tools import *
 
 ########################################################
 #                                                      #
-# Esta clase prepara la base de datos a usar para el   #
-# posterior entrenamiento, pudiendo ser k-means,       #
-# k-medians y SOM.                                     #
+# This class prepares the database to train with the   #
+# k-means, k-medians and SOM.                          #
 #                                                      #
-# entrenamiento(archivos,columnas), donde "archivos"   #
-# es una lista que contiene las rutas a los archivos a #
-# usar para entrenar, "columnas" es una lista con los  #
-# números de columna que se usarán para entrenar.      #
+# entrenamiento(archivos,columnas), where "archivos"   #
+# is a list that contains the file path of the         #
+# databases to train, "columnas" is a list with the    #
+# column number with the variables to train the system.#
 #                                                      #
 # entrenamiento.reduccion_pca(columnas,porcentajes),   #
-# donde "columnas" es una lista de listas que contiene #
-# las columnas a las que se desea aplicar reducción de #
-# la dimensionalidad, "porcentajes" es una lista con   #
-# los porcentajes de varianza mínimos deseados para    #
-# elegir el número de componentes principales.         #
-# entrenamiento.pcas es una lista con las componentes  #
-# principales usadas para la reducción de              #
-# dimensionalidad, útil para aplicar el mismo          #
-# procedimiento al conjunto de validación.             #
-# entrenamiento.estandarizaciones es una lista con los #
-# parámetros de estandarización usados para cada       #
-# conjunto de variables ingresado, útil para aplicar   #
-# al conjunto de validación. entrenar.componentes es   #
-# el número de componentes usadas para reducir cada    #
-# conjunto de variables ingresado, útil para aplicar   #
-# al conjunto de validación.                           #
+# where "columnas" is a list that contains the column  #
+# number of the variables that the user wants to       #
+# reduce the dimensionality, "porcentajes" is a        #
+# list with the minimum variance's percentages to      #
+# calculate the number of princilal components.        #
+# entrenamiento.pcas is a list with the principal      #
+# input database, its purpose is to use the same PCA   #
+# algorithm output to apply on the clustering set.     #
+# entrenamiento.estandarizaciones is a list with the   #
+# standarization parameters for each input variable    #
+# set, its purpose is to apply this parameters on the  #
+# clustering set. entrenar.componentes is the number   #
+# of components of each input variable set, its purpose#
+# is to apply on the input variable set.               #
 #                                                      #
-# entrenamiento.escalamiento(metodo), donde "metodo"   #
-# el método a usar para escalar los valores de cada    #
-# variable, las opciones son: "estandarizar", "minmax  #
-# y "maxabs". entrenamiento.escala guarda el modelo    #
-# para ser usado en el conjunto de validación.         #
+# entrenamiento.escalamiento(metodo), where "metodo"   #
+# is the method to scale the values of each variable,  #
+# the options are: "estandarizar", "minmax" and        #
+# "maxabs". entrenamiento.escala stores the model to be#
+# use on the clustering set.                           #
 #                                                      #
-# entrenamiento.kmeans(num_cum), donde "num_cum" es el #
-# número de centroides que se usarán para el           #
-# entrenamiento. entrenamiento.kmedias guarda los      #
-# centroides para aplicar al conjunto de validación.   #
+# entrenamiento.kmeans(num_cum), where "num_cum" is the#
+# number of clusters to train the system.              #
+# entrenamiento.kmedias stores the clusters to apply on#
+# the clustering set.                                  #
 #                                                      #
-# entrenamiento.kmedians(num_cum), donde "num_cum" es  #
-# el número de centroides que se usarán para el        #
-# entrenamiento. entrenamiento.kmedianas guarda los    #
-# centroides para aplicar al conjunto de validación.   #
-#                                                      #
-# entrenamiento.kmedoids(num_cum), donde "num_cum" es  #
-# el número de centroides que se usarán para el        #
-# entrenamiento. entrenamiento.kmedoides guarda los    #
-# centroides para aplicar al conjunto de validación.   #
-# Aún no es del todo aplicable, dado que la            #
-# implementación requiere demasiada memoria.           #
+# entrenamiento.kmedians(num_cum), where "num_cum" is  #
+# the number of clusters to train the system.          #
+# entrenamiento.kmedianas stores the clusters to apply #
+# on the clustering set.                               #
 #                                                      #
 # entrenamiento.som(x,y,iteraciones,vecindad,aprendizaje,topologia), #
-# donde "x" y "y" son las dimensiones de la red,       #
-# "vecindad" es el parámetro de vecindad para la       #
-# actualización de los pesos, "aprendizaje" es el      #
-# factor de aprendizaje, "topologia" es la topología   #
-# de la red, pudiendo ser "hexagonal" o "rectangular". #
-# entrenamiento.mau almacena la red entrenada. A la    #
-# salida genera el gráfico del mapa de distancias y    #
-# el gráfico de errores topológico y de cuantización.  #
+# where "x" and "y" are the map dimensions, "vecindad" #
+# is the neighborhood parameter to update the neurons  #
+# weights, "aprendizaje" is the learning factor        #
+# "topologia" is the network topology, that could be   #
+# "hexagonal" or "rectangular". entrenamiento.mau      #
+# stores the trained map. The u-matrix and the error   #
+# plots are generated.                                 #
 #                                                      #
 ########################################################
 

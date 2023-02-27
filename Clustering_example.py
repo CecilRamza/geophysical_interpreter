@@ -3,20 +3,20 @@ from herramientas import *
 import pickle
 
 ###
-# Agrupamiento
+# Clustering
 ###
 
 ##
-# "n_entrenar" es el número de archivos cuyos vectores se usarán para entrenar
-# "centroides" es usado para el entrenamiento usando métodos de agrupamiento
-# "bases" es una lista cuyos elementos son los nombres de archivos de los que se eligirán las bases de datos que se usarán para entrenar
-# "columnas" es una lista con las columnas de las variables que se usarán para entrenar
-# "reduccion" es una lista de listas que contiene los conjuntos de variables (columnas) a usar para reducir la dimensionalidad usando PCA, considerando únicamente las variables de la lista "columnas"
-# "varianzas" es una lista cuyos elementos son la varianza que se usará para elegir las componentes principales del algoritmo PCA
+# "n_entrenar" is the files number to use in the trainig step
+# "centroides" used to train the system with the k-means and k-medians algorithms
+# "bases" is a list with the elements with the files name to choose for the traing step
+# "columnas" is a list with the columns label of the variables for the training step.
+# "reduccion" is a list of lists with the variable sets (columns) to reduce its dimensionality
+# "varianzas" is a list with the variance to choose the principal components for the PCA algorithm
 ##
 
 #
-# El siguiente es un ejemplo de agrupamiento por métodos aglomerativos
+# The following code is an clustering example using the k-means or k-medians algorithms
 #
 
 archivo="Magnetometría/Base_de_datos-filtrada/7F.csv"
@@ -64,7 +64,7 @@ clasificada.etiquetar(1)
 grafica(clasificada.clasificados,[2,3],[4,5,6],nombres=["Gradiente vertical [nT/m]","Etiquetas"],titulos=["Malla","Centroides k-medias (3D isomap)"],clasificacion=clasificada.malla_etiquetas)
 
 #
-# El siguiente es un ejemplo de agrupamiento por som
+# The following code is an clustering example using the SOM algorithm
 #
 
 for i in range(n_redes):
