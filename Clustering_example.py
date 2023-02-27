@@ -1,5 +1,5 @@
-from agrupamiento import *
-from herramientas import *
+from clustering import *
+from tools import *
 import pickle
 
 ###

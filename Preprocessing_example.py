@@ -1,16 +1,16 @@
-from preproceso import *
+from preprocessing import *
 
 ###
-# Modelación semi-automática de TRE2D
+# ERT2D semi-automatic modelling
 ###
 
 ##
-# Malla.vtk es la malla donde se encuentra el modelo base, las mallas inicio y fin son las porciones inicial y final de dicho archivo excluyendo los datos de resistividad
-# intervalos son los rangos de variación de cada región definida en el modelo base
-# secuencias son los archivos que contiene la secuencia de adquisición para generar los modelos, con el formato requerido por resIPy
-# modelos es el número de modelos a generar
-# electrodos es el número de electrodos por cada secuencia
-# dx es la separación entre electrodos
+# Malla.vtk is the grid with the base model, the "Malla_inicio.vtk" and "Malla_fin.vtk" are the first and last sections of the "Malla.vtk" excluding the resistivity data
+# intervalos is the variation range of the random generated resistivities to build the model, according to the base model
+# secuencias are the files that contains the the automatic sequence archives for the model generation, with the format required by the ResIPy API
+# modelos is the number of models to generate
+# electrodos are the number of electrodes per automatic sequence
+# dx is the electrode spacing
 ##
 
 intervalos=[[0.01,10],[10,100],[100,1000]]
@@ -25,12 +25,12 @@ modelacion.agrupar_secuencias(vecinos)
 modelacion.agrupar_modelo()
 
 ###
-# Preparación de bases de datos para el entrenamiento
+# Database preparation for the training and clustering steps
 ###
 
 ##
-# carpeta es la dirección en donde se localiza la base de datos a preparar
-# datos son los archivos que contienen las bases de datos que se desean agrupar y preparar, cada archivo contiene la información de una variable explicativa
+# carpeta is the path of the databases
+# datos are the files names that contains the databases to preprocess
 ##
 
 carpeta_magnetometria="Magnetometría/"

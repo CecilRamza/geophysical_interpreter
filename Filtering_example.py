@@ -1,4 +1,4 @@
-from filtrado import *
+from filtering import *
 
 ###
 # ERT2D filtering through the DWT1D

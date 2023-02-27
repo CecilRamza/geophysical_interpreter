@@ -1,4 +1,4 @@
-from entrenamiento import *
+from training import *
 import pickle
 
 ###
